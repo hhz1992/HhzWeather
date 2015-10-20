@@ -7,12 +7,10 @@ import android.util.Log;
 import com.google.gson.JsonObject;
 import com.gwu.huanzhou.hhzweather.utils.Wunderground;
 
-import java.net.URL;
-
 /**
  * Created by Huanzhou on 2015/10/19.
  */
-public class WundergroundSearchAsyncTask  extends AsyncTask<String,Integer,URL> {
+public class WundergroundSearchAsyncTask  extends AsyncTask<String,Integer,String> {
 
 
     private static final String TAG = "WundergroundSearchAsyncTask";
@@ -21,7 +19,7 @@ public class WundergroundSearchAsyncTask  extends AsyncTask<String,Integer,URL> 
 
 
     public interface WundergroundCompletionListener{
-        public void WundergroundFound(URL url);
+        public void WundergroundFound(String zip);
         public void WundergroundNotFound();
     }
 
@@ -32,14 +30,15 @@ public class WundergroundSearchAsyncTask  extends AsyncTask<String,Integer,URL> 
 
 
     @Override
-    protected URL doInBackground(String... query) {
+    protected String doInBackground(String... query) {
 
         try{
-            JsonObject jsonResult = Wunderground.queryWundergroundForLocation("38.846846846846844", "-77.03909252879366", mContext);
+            JsonObject jsonResult = Wunderground.queryWundergroundForLocation(query[0], query[1], mContext);
+            String zip = Wunderground.parseLocationFromWundergroundJSON(jsonResult);
 
-            System.out.println("json: "+jsonResult);
+            //System.out.println("zip: "+zip);
 
-            return null;
+            return zip;
 
         }
         catch(Exception e){
@@ -50,15 +49,15 @@ public class WundergroundSearchAsyncTask  extends AsyncTask<String,Integer,URL> 
     }
 
     @Override
-    protected void onPostExecute(URL url){
-        super.onPostExecute(url);
+    protected void onPostExecute(String zip){
+        super.onPostExecute(zip);
 
         System.out.println("test!!!!!!!");
-        System.out.println(url);
+        System.out.println(zip);
 
         if(mCompletionListener != null){
-            if(url != null){
-                mCompletionListener.WundergroundFound(url);
+            if(zip != null){
+                mCompletionListener.WundergroundFound(zip);
             }
             else{
                 mCompletionListener.WundergroundNotFound();

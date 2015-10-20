@@ -44,29 +44,23 @@ public class Wunderground {
 
 
 
-    public static URL parseLocationFromWundergroundJSON(JsonObject jsonObject, int desiredOrientation) throws Exception{
-        JsonArray locationResults = jsonObject
-                .getAsJsonObject("d").getAsJsonArray("results").get(0).getAsJsonObject().getAsJsonArray("Image");
-        if (locationResults != null && locationResults.size() > 0) {
-            for (int i = 0; i < locationResults.size(); i++) {
-                JsonObject locationResult = locationResults.get(i).getAsJsonObject();
-                boolean tooBig = locationResult.get("FileSize").getAsInt() > Constants.MAX_IMAGE_FILE_SIZE_IN_BYTES;
+    public static String parseLocationFromWundergroundJSON(JsonObject jsonObject) throws Exception{
 
-                if (tooBig == false) {
-                    int width = locationResult.get("Width").getAsInt();
-                    int height = locationResult.get("Height").getAsInt();
+        JsonObject locationResult = jsonObject.getAsJsonObject("location");
 
-                    if (desiredOrientation == Configuration.ORIENTATION_PORTRAIT) {
-                        if (height > width) {
-                            return new URL(locationResult.get("MediaUrl").getAsString());
-                        }
-                    } else if (desiredOrientation == Configuration.ORIENTATION_LANDSCAPE) {
-                        if (width > height) {
-                            return new URL(locationResult.get("MediaUrl").getAsString());
-                        }
-                    }
-                }
-            }
+
+                        //getAsJsonArray("results").get(0).getAsJsonObject().getAsJsonArray("Image");
+
+
+        if (locationResult != null) {
+
+            String state = locationResult.get("state").getAsString();
+            String zip = locationResult.get("zip").getAsString();
+
+            System.out.println("state:"+ state);
+            System.out.println("zip:"+ zip);
+
+            return zip;
         }
 
         return null;

@@ -15,8 +15,6 @@ import com.gwu.huanzhou.hhzweather.R;
 import com.gwu.huanzhou.hhzweather.asynctask.WundergroundSearchAsyncTask;
 import com.gwu.huanzhou.hhzweather.sensor.LocationFinder;
 
-import java.net.URL;
-
 public class WeatherActivity extends AppCompatActivity implements LocationFinder.LocationDetector, WundergroundSearchAsyncTask.WundergroundCompletionListener {
 
     private final String TAG = "WeatherActivity";
@@ -36,16 +34,10 @@ public class WeatherActivity extends AppCompatActivity implements LocationFinder
                         .setAction("Action", null).show();
 
 
-
-
-
-
-
             }
         });
 
-        WundergroundSearchAsyncTask task = new WundergroundSearchAsyncTask(this,this);
-        task.execute();
+
 
         LocationFinder locationFinder = new LocationFinder(this,this);
         locationFinder.detectLocation();
@@ -85,6 +77,9 @@ public class WeatherActivity extends AppCompatActivity implements LocationFinder
         System.out.println(location.getLatitude());
         System.out.println(location.getLongitude());
 
+        WundergroundSearchAsyncTask task = new WundergroundSearchAsyncTask(this,this);
+        task.execute(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()));
+
         Log.d(TAG, "location found");
     }
 
@@ -95,8 +90,8 @@ public class WeatherActivity extends AppCompatActivity implements LocationFinder
     }
 
     @Override
-    public void WundergroundFound(URL url) {
-        Log.d(TAG,"Wunderground Found");
+    public void WundergroundFound(String zip) {
+        Log.d(TAG,"Wunderground Found "+zip);
     }
 
     @Override
