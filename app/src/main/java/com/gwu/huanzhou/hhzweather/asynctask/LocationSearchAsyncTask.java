@@ -10,20 +10,20 @@ import com.gwu.huanzhou.hhzweather.utils.Wunderground;
 /**
  * Created by Huanzhou on 2015/10/19.
  */
-public class WundergroundSearchAsyncTask  extends AsyncTask<String,Integer,String> {
+public class LocationSearchAsyncTask  extends AsyncTask<String,Integer,String> {
 
 
-    private static final String TAG = "WundergroundSearchAsyncTask";
+    private static final String TAG = "LocationSearchAsyncTask";
     private Context mContext;
-    private WundergroundCompletionListener mCompletionListener;
+    private LocationSearchCompletionListener mCompletionListener;
 
 
-    public interface WundergroundCompletionListener{
-        public void WundergroundFound(String zip);
-        public void WundergroundNotFound();
+    public interface LocationSearchCompletionListener{
+        public void WundergroundLocationFound(String zip);
+        public void WundergroundLocationNotFound();
     }
 
-    public WundergroundSearchAsyncTask(Context context, WundergroundCompletionListener completionListener){
+    public LocationSearchAsyncTask(Context context, LocationSearchCompletionListener completionListener){
         mContext = context;
         mCompletionListener = completionListener;
     }
@@ -35,8 +35,6 @@ public class WundergroundSearchAsyncTask  extends AsyncTask<String,Integer,Strin
         try{
             JsonObject jsonResult = Wunderground.queryWundergroundForLocation(query[0], query[1], mContext);
             String zip = Wunderground.parseLocationFromWundergroundJSON(jsonResult);
-
-            //System.out.println("zip: "+zip);
 
             return zip;
 
@@ -52,15 +50,12 @@ public class WundergroundSearchAsyncTask  extends AsyncTask<String,Integer,Strin
     protected void onPostExecute(String zip){
         super.onPostExecute(zip);
 
-        System.out.println("test!!!!!!!");
-        System.out.println(zip);
-
         if(mCompletionListener != null){
             if(zip != null){
-                mCompletionListener.WundergroundFound(zip);
+                mCompletionListener.WundergroundLocationFound(zip);
             }
             else{
-                mCompletionListener.WundergroundNotFound();
+                mCompletionListener.WundergroundLocationNotFound();
             }
         }
 

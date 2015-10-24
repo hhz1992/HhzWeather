@@ -8,6 +8,8 @@ import android.util.Base64;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.gwu.huanzhou.hhzweather.Constants;
+import com.gwu.huanzhou.hhzweather.model.Condition;
+import com.gwu.huanzhou.hhzweather.model.Displaylocation;
 import com.koushikdutta.ion.Ion;
 
 import java.io.File;
@@ -31,26 +33,9 @@ public class Wunderground {
         }
     }
 
-
-//    public static void main(String[] args) {
-//
-//        JsonObject json = queryWundergroundForLocation("38.846846846846844", "-77.03909252879366", null);
-//
-//        System.out.println(json);
-//
-//    }
-
-
-
-
-
     public static String parseLocationFromWundergroundJSON(JsonObject jsonObject) throws Exception{
 
         JsonObject locationResult = jsonObject.getAsJsonObject("location");
-
-
-                        //getAsJsonArray("results").get(0).getAsJsonObject().getAsJsonArray("Image");
-
 
         if (locationResult != null) {
 
@@ -67,7 +52,50 @@ public class Wunderground {
     }
 
 
+    public static JsonObject queryWundergroundForCondition(String zip, Context context) {
+        try {
+            return
+                    Ion.with(context).load(Constants.Wunderground_SEARCH_CONDITION_URL + zip + ".json")
+                            .asJsonObject().get();
+        } catch (Exception e) {
+            System.out.println(e);
+            return null;
+        }
+    }
 
+    public static boolean parseConditionFromWundergroundJSON(JsonObject jsonObject, Condition condition) throws Exception{
+
+        JsonObject conditionResult = jsonObject.getAsJsonObject("current_observation");
+
+        if (conditionResult != null) {
+
+            condition.setmWeather(conditionResult.get("weather").getAsString());
+            condition.setmTemperatureString(conditionResult.get("temperature_string").getAsString());
+            condition.setmTemperatureF(conditionResult.get("temp_f").getAsString()+" F");
+            condition.setmTemperatureC(conditionResult.get("temp_c").getAsString()+" C");
+
+            condition.setmWind(conditionResult.get("wind_string").getAsString());
+            condition.setmRelativeHumidity(conditionResult.get("relative_humidity").getAsString());
+            condition.setmIconUrl(conditionResult.get("icon_url").getAsString());
+
+            JsonObject displayLocationJson = conditionResult.getAsJsonObject("observation_location");
+            Displaylocation displaylocation = new Displaylocation();
+
+            displaylocation.setmCity(displayLocationJson.get("city").getAsString());
+            displaylocation.setmCountry(displayLocationJson.get("country").getAsString());
+            displaylocation.setmState(displayLocationJson.get("state").getAsString());
+
+            condition.setmDisplaylocation(displaylocation);
+
+            System.out.println("displaylocation:" + displaylocation.getmCountry());
+
+            System.out.println("weather:" + condition.getmWeather());
+
+            return true;
+        }
+
+        return false;
+    }
 
 
 
