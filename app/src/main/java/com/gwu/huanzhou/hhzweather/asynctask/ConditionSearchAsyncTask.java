@@ -36,8 +36,7 @@ public class ConditionSearchAsyncTask extends AsyncTask<String,Integer,Condition
         Condition condition = new Condition();
 
         try{
-            JsonObject jsonResult = Wunderground.queryWundergroundForCondition(query[0], mContext);
-
+            JsonObject jsonResult = Wunderground.queryWundergroundForCondition(query[0],query[1], mContext);
             Wunderground.parseConditionFromWundergroundJSON(jsonResult,condition);
 
             return condition;

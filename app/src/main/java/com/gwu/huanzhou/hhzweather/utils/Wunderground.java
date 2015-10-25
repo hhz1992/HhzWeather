@@ -55,7 +55,18 @@ public class Wunderground {
     public static JsonObject queryWundergroundForCondition(String zip, Context context) {
         try {
             return
-                    Ion.with(context).load(Constants.Wunderground_SEARCH_CONDITION_URL + zip + ".json")
+                    Ion.with(context).load(Constants.Wunderground_SEARCH_CONDITION_ZIP_URL + zip + ".json")
+                            .asJsonObject().get();
+        } catch (Exception e) {
+            System.out.println(e);
+            return null;
+        }
+    }
+
+    public static JsonObject queryWundergroundForCondition(String longitude, String latitude , Context context) {
+        try {
+            return
+                    Ion.with(context).load(Constants.Wunderground_SEARCH_CONDITION_GPS_URL + longitude +","+latitude+".json")
                             .asJsonObject().get();
         } catch (Exception e) {
             System.out.println(e);
@@ -78,7 +89,7 @@ public class Wunderground {
             condition.setmRelativeHumidity(conditionResult.get("relative_humidity").getAsString());
             condition.setmIconUrl(conditionResult.get("icon_url").getAsString());
 
-            JsonObject displayLocationJson = conditionResult.getAsJsonObject("observation_location");
+            JsonObject displayLocationJson = conditionResult.getAsJsonObject("display_location");
             Displaylocation displaylocation = new Displaylocation();
 
             displaylocation.setmCity(displayLocationJson.get("city").getAsString());

@@ -4,24 +4,21 @@ import android.content.Context;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
-import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gwu.huanzhou.hhzweather.R;
+import com.gwu.huanzhou.hhzweather.asynctask.BingImageSearchAsyncTask;
 import com.gwu.huanzhou.hhzweather.asynctask.ConditionSearchAsyncTask;
 import com.gwu.huanzhou.hhzweather.asynctask.LocationSearchAsyncTask;
 import com.gwu.huanzhou.hhzweather.model.Condition;
@@ -29,21 +26,20 @@ import com.gwu.huanzhou.hhzweather.sensor.LocationFinder;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
-public class WeatherActivity extends AppCompatActivity implements LocationFinder.LocationDetector, LocationSearchAsyncTask.LocationSearchCompletionListener, ConditionSearchAsyncTask.ConditionSearchCompletionListener {
+import java.net.URL;
+
+public class WeatherActivity extends AppCompatActivity implements LocationFinder.LocationDetector, LocationSearchAsyncTask.LocationSearchCompletionListener, ConditionSearchAsyncTask.ConditionSearchCompletionListener,BingImageSearchAsyncTask.ImageSearchCompletionListener {
 
     private final String TAG = "WeatherActivity";
 
     private ImageView mImageView;
+    private ImageView mBackgroundView;
 
     private TextView mTextViewTempF;
     private TextView mTextViewWeather;
     private TextView mTextViewRelativeHumidity;
     private LinearLayout mLinearLayoutRound;
-    private RelativeLayout mRelativeLayoutCentre;
 
-    private int _xDelta;
-    private int _yDelta;
-    private ViewGroup mRrootLayout;
 
 
     @Override
@@ -58,9 +54,9 @@ public class WeatherActivity extends AppCompatActivity implements LocationFinder
         mTextViewWeather = (TextView) findViewById(R.id.weather);
         mTextViewRelativeHumidity = (TextView) findViewById(R.id.relative_humidity);
         mLinearLayoutRound = (LinearLayout) findViewById(R.id.round);
-        mRelativeLayoutCentre = (RelativeLayout) findViewById(R.id.centre);
+        mBackgroundView = (ImageView) findViewById(R.id.background);
 
-        mRrootLayout = (ViewGroup) findViewById(R.id.root);
+
 
         final Animation animation = new AlphaAnimation(1, 0); // Change alpha from fully visible to invisible
         animation.setDuration(500); // duration - half a second
@@ -85,7 +81,6 @@ public class WeatherActivity extends AppCompatActivity implements LocationFinder
                 toast.show();
 
                 v.clearAnimation();
-
 
             }
         });
@@ -121,7 +116,6 @@ public class WeatherActivity extends AppCompatActivity implements LocationFinder
                                 .start();
                         break;
                     case MotionEvent.ACTION_UP:
-                        System.out.println(roundY);
 
                         v.animate()
                                 .y(roundY)
@@ -216,8 +210,11 @@ public class WeatherActivity extends AppCompatActivity implements LocationFinder
         System.out.println(location.getLatitude());
         System.out.println(location.getLongitude());
 
-        LocationSearchAsyncTask task = new LocationSearchAsyncTask(this, this);
-        task.execute(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()));
+        ConditionSearchAsyncTask conditionTask = new ConditionSearchAsyncTask(this, this);
+       // LocationSearchAsyncTask locationTask = new LocationSearchAsyncTask(this, this);
+
+        conditionTask.execute(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()));
+        //locationTask.execute(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()));
 
         Log.d(TAG, "location found");
     }
@@ -232,8 +229,8 @@ public class WeatherActivity extends AppCompatActivity implements LocationFinder
     public void WundergroundLocationFound(String zip) {
         Log.d(TAG, "Wunderground Found " + zip);
 
-        ConditionSearchAsyncTask task = new ConditionSearchAsyncTask(this, this);
-        task.execute(zip);
+        //ConditionSearchAsyncTask task = new ConditionSearchAsyncTask(this, this);
+        //task.execute(zip);
 
 
     }
@@ -252,6 +249,12 @@ public class WeatherActivity extends AppCompatActivity implements LocationFinder
         mTextViewTempF.setText(condition.getmTemperatureF());
         mTextViewWeather.setText(condition.getmWeather());
         mTextViewRelativeHumidity.setText(condition.getmRelativeHumidity());
+
+        BingImageSearchAsyncTask task = new BingImageSearchAsyncTask(this, this);
+
+        System.out.println(condition.getmDisplaylocation().getmCity());
+        task.execute(condition.getmDisplaylocation().getmCity());
+
 
         Ion.with(mImageView).load(condition.getmIconUrl()).setCallback(new FutureCallback<ImageView>() {
             @Override
@@ -277,25 +280,27 @@ public class WeatherActivity extends AppCompatActivity implements LocationFinder
     }
 
 
+    @Override
+    public void imageUrlFound(URL url) {
+        Ion.with(mBackgroundView).load(url.toString()).setCallback(new FutureCallback<ImageView>() {
+            @Override
+            public void onCompleted(Exception e, ImageView result) {
+                if(e == null){
+                    //yay
 
-    private void moveViewToScreenCenter( View view )
-    {
-        RelativeLayout root = (RelativeLayout) findViewById( R.id.centre );
-        DisplayMetrics dm = new DisplayMetrics();
-        this.getWindowManager().getDefaultDisplay().getMetrics( dm );
-        int statusBarOffset = dm.heightPixels - root.getMeasuredHeight();
+                }
+                else{
+                    Log.d(TAG, "image failed to load");
 
-        int originalPos[] = new int[2];
-        view.getLocationOnScreen( originalPos );
+                }
+            }
+        });
+    }
 
-        int xDest = dm.widthPixels/2;
-        xDest -= (view.getMeasuredWidth()/2);
-        int yDest = dm.heightPixels/2 - (view.getMeasuredHeight()/2) - statusBarOffset;
+    @Override
+    public void imageUrlNotFound() {
+        Log.d(TAG, "image url not found");
 
-        TranslateAnimation anim = new TranslateAnimation( 0, xDest - originalPos[0] , 0, yDest - originalPos[1] );
-        anim.setDuration(1000);
-        anim.setFillAfter( true );
-        view.startAnimation(anim);
     }
 
 }

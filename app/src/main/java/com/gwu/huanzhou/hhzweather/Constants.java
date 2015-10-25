@@ -22,5 +22,6 @@ public class Constants {
 
 
     public static final String Wunderground_SEARCH_LOCATION_URL = "http://api.wunderground.com/api/234d02fb0dc009a1/geolookup/q/";
-    public static final String Wunderground_SEARCH_CONDITION_URL = "http://api.wunderground.com/api/234d02fb0dc009a1/conditions/q/zip/";
+    public static final String Wunderground_SEARCH_CONDITION_ZIP_URL = "http://api.wunderground.com/api/234d02fb0dc009a1/conditions/q/zip/";
+    public static final String Wunderground_SEARCH_CONDITION_GPS_URL = "http://api.wunderground.com/api/234d02fb0dc009a1/conditions/q/";
 }

@@ -6,8 +6,17 @@
     android:layout_height="match_parent" android:fitsSystemWindows="true"
     tools:context=".WeatherActivity">
 
+    <ImageView
+        android:id="@+id/background"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:src="@drawable/background"
+        android:scaleType="fitXY"
+
+        />
 
     <include layout="@layout/content_weather" />
+
 
 
 </android.support.design.widget.CoordinatorLayout>
