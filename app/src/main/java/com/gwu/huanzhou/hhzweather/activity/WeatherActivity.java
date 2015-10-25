@@ -1,8 +1,16 @@
 package com.gwu.huanzhou.hhzweather.activity;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -17,6 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.gwu.huanzhou.hhzweather.PersistanceManager;
 import com.gwu.huanzhou.hhzweather.R;
 import com.gwu.huanzhou.hhzweather.asynctask.BingImageSearchAsyncTask;
 import com.gwu.huanzhou.hhzweather.asynctask.ConditionSearchAsyncTask;
@@ -31,6 +40,7 @@ import java.net.URL;
 public class WeatherActivity extends AppCompatActivity implements LocationFinder.LocationDetector, LocationSearchAsyncTask.LocationSearchCompletionListener, ConditionSearchAsyncTask.ConditionSearchCompletionListener,BingImageSearchAsyncTask.ImageSearchCompletionListener {
 
     private final String TAG = "WeatherActivity";
+    private static final int LOCATION_ACCESS_REQUEST_CODE = 1;
 
     private ImageView mImageView;
     private ImageView mBackgroundView;
@@ -42,6 +52,10 @@ public class WeatherActivity extends AppCompatActivity implements LocationFinder
     private LinearLayout mLinearLayoutRound;
     private TextView mTextViewNotification;
 
+    private PersistanceManager mPersistanceManager;
+
+    Condition condition;
+    private boolean conditionFoundFlag = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +63,8 @@ public class WeatherActivity extends AppCompatActivity implements LocationFinder
         setContentView(R.layout.activity_weather);
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         // setSupportActionBar(toolbar);
+
+        mPersistanceManager = new PersistanceManager(this);
 
         mImageView = (ImageView) findViewById(R.id.image);
         mTextViewTempF = (TextView) findViewById(R.id.temp_f);
@@ -68,12 +84,28 @@ public class WeatherActivity extends AppCompatActivity implements LocationFinder
 
         mLinearLayoutRound.startAnimation(animation);
 
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+            //show dialog
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.location_permission_title)
+                    .setMessage(R.string.location_permission_message)
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            //prompt user with system dialog for location permission upon user clicking okay dialog button
+                            ActivityCompat.requestPermissions(WeatherActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, LOCATION_ACCESS_REQUEST_CODE);
+                        }
+                    })
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setCancelable(false)
+                    .show();
+        }
+
 
         mLinearLayoutRound.setOnTouchListener(new View.OnTouchListener() {
-            float  dY,y1,y2;
+            float dY, y1, y2;
 
             boolean flag = false;
-            float  roundY ;
+            float roundY;
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -82,7 +114,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationFinder
 
                     case MotionEvent.ACTION_DOWN:
 
-                        if(flag == false){
+                        if (flag == false) {
                             flag = true;
                             roundY = v.getY();
 
@@ -102,11 +134,16 @@ public class WeatherActivity extends AppCompatActivity implements LocationFinder
 
                         y2 = v.getY();
 
-                        if(Math.abs(y1-y2)<5 ){
+                        if (Math.abs(y1 - y2) < 5) {
+
+                            if(conditionFoundFlag) {
+                                Intent intent = new Intent(getBaseContext(), DetailedActivity.class);
+                                startActivity(intent);
+                            }
 
                             System.out.println("click");
 
-                        }else {
+                        } else {
 
                             v.animate()
                                     .y(roundY)
@@ -212,8 +249,11 @@ public class WeatherActivity extends AppCompatActivity implements LocationFinder
     @Override
     public void WundergroundConditionFound(Condition condition) {
 
-        System.out.println(condition.getmWeather());
+        this.condition = condition;
 
+        mPersistanceManager.saveConditionLocally(condition);
+
+        System.out.println(condition.getmWeather());
 
         mLinearLayoutRound.clearAnimation();
         mTextViewNotification.setVisibility(View.GONE);
@@ -229,6 +269,9 @@ public class WeatherActivity extends AppCompatActivity implements LocationFinder
         mTextViewRelativeHumidity.setText(condition.getmRelativeHumidity());
 
         mTextViewLocation.setText(condition.getmDisplaylocation().getmCity());
+
+        conditionFoundFlag = true;
+
 
         BingImageSearchAsyncTask task = new BingImageSearchAsyncTask(this, this);
 

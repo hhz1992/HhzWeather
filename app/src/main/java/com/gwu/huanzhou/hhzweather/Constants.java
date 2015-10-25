@@ -24,4 +24,17 @@ public class Constants {
     public static final String Wunderground_SEARCH_LOCATION_URL = "http://api.wunderground.com/api/234d02fb0dc009a1/geolookup/q/";
     public static final String Wunderground_SEARCH_CONDITION_ZIP_URL = "http://api.wunderground.com/api/234d02fb0dc009a1/conditions/q/zip/";
     public static final String Wunderground_SEARCH_CONDITION_GPS_URL = "http://api.wunderground.com/api/234d02fb0dc009a1/conditions/q/";
+
+    public static final String TEMPERATURE_F = "TEMPERATURE_F";
+    public static final String TEMPERATURE_C = "TEMPERATURE_C";
+    public static final String ICON_URL = "ICON_URL";
+    public static final String WIND = "WIND";
+    public static final String RELATIVE_HUMIDITY = "RELATIVE_HUMIDITY";
+    public static final String WEATHER = "WEATHER";
+    public static final String CITY = "CITY";
+    public static final String STATE = "STATE";
+    public static final String COUNTRY = "COUNTRY";
+
+
+
 }
