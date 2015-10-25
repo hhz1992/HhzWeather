@@ -38,8 +38,9 @@ public class WeatherActivity extends AppCompatActivity implements LocationFinder
     private TextView mTextViewTempF;
     private TextView mTextViewWeather;
     private TextView mTextViewRelativeHumidity;
+    private TextView mTextViewLocation;
     private LinearLayout mLinearLayoutRound;
-
+    private TextView mTextViewNotification;
 
 
     @Override
@@ -56,7 +57,8 @@ public class WeatherActivity extends AppCompatActivity implements LocationFinder
         mLinearLayoutRound = (LinearLayout) findViewById(R.id.round);
         mBackgroundView = (ImageView) findViewById(R.id.background);
 
-
+        mTextViewLocation = (TextView) findViewById(R.id.location);
+        mTextViewNotification =  (TextView) findViewById(R.id.notification);
 
         final Animation animation = new AlphaAnimation(1, 0); // Change alpha from fully visible to invisible
         animation.setDuration(500); // duration - half a second
@@ -67,28 +69,8 @@ public class WeatherActivity extends AppCompatActivity implements LocationFinder
         mLinearLayoutRound.startAnimation(animation);
 
 
-
-
-        mLinearLayoutRound.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Context context = getApplicationContext();
-                CharSequence text = "Hello toast!";
-                int duration = Toast.LENGTH_SHORT;
-
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.show();
-
-                v.clearAnimation();
-
-            }
-        });
-
-
-
         mLinearLayoutRound.setOnTouchListener(new View.OnTouchListener() {
-            float dX, dY;
+            float  dY,y1,y2;
 
             boolean flag = false;
             float  roundY ;
@@ -106,6 +88,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationFinder
 
                         }
                         dY = v.getY() - event.getRawY();
+                        y1 = v.getY();
                         break;
 
                     case MotionEvent.ACTION_MOVE:
@@ -117,32 +100,33 @@ public class WeatherActivity extends AppCompatActivity implements LocationFinder
                         break;
                     case MotionEvent.ACTION_UP:
 
-                        v.animate()
-                                .y(roundY)
-                                .setDuration(1000)
-                                .start();
+                        y2 = v.getY();
 
+                        if(Math.abs(y1-y2)<5 ){
 
-//                        System.out.println(roundY);
-//                        System.out.println(v.getY());
-//
-//                        float translateY = roundY- v.getY();
-//
-//
-//                        System.out.println(translateY);
-//
-//                        TranslateAnimation moveLefttoRight = new TranslateAnimation(0, 0, 0, 594);
-//                        moveLefttoRight.setDuration(1000);
-//                        moveLefttoRight.setFillAfter(true);
-//
-//                        v.startAnimation(moveLefttoRight);
-//                        break;
-                        //moveViewToScreenCenter(v);
+                            System.out.println("click");
+
+                        }else {
+
+                            v.animate()
+                                    .y(roundY)
+                                    .setDuration(1000)
+                                    .start();
+
+                            mLinearLayoutRound.startAnimation(animation);
+
+                            Context context = getApplicationContext();
+                            CharSequence text = "Getting Your Weather";
+                            int duration = Toast.LENGTH_LONG;
+
+                            Toast toast = Toast.makeText(context, text, duration);
+                            toast.show();
+
+                        }
+
                         break;
 
-
                     default:
-
                         return false;
                 }
                 return true;
@@ -151,24 +135,8 @@ public class WeatherActivity extends AppCompatActivity implements LocationFinder
             }
         });
 
-
-
-
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//
-//
-//            }
-//        });
-
-
         LocationFinder locationFinder = new LocationFinder(this, this);
         locationFinder.detectLocation();
-
 
     }
 
@@ -246,9 +214,21 @@ public class WeatherActivity extends AppCompatActivity implements LocationFinder
 
         System.out.println(condition.getmWeather());
 
+
+        mLinearLayoutRound.clearAnimation();
+        mTextViewNotification.setVisibility(View.GONE);
+
+        mTextViewTempF.setVisibility(View.VISIBLE);
+        mTextViewWeather.setVisibility(View.VISIBLE);
+        mTextViewRelativeHumidity.setVisibility(View.VISIBLE);
+        mTextViewLocation.setVisibility(View.VISIBLE);
+        mImageView.setVisibility(View.VISIBLE);
+
         mTextViewTempF.setText(condition.getmTemperatureF());
         mTextViewWeather.setText(condition.getmWeather());
         mTextViewRelativeHumidity.setText(condition.getmRelativeHumidity());
+
+        mTextViewLocation.setText(condition.getmDisplaylocation().getmCity());
 
         BingImageSearchAsyncTask task = new BingImageSearchAsyncTask(this, this);
 
