@@ -1,4 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="app_name">HhzWeather</string>
     <string name="action_settings">Settings</string>
     <string name="location_permission_title">Location Permission</string>

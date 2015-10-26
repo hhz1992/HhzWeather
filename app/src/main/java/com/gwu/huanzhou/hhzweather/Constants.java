@@ -6,12 +6,10 @@ package com.gwu.huanzhou.hhzweather;
 public class Constants {
 
 
-    public static final String REACTION_IMAGE_FILE_NAME = "high_score_reaction.jpg";
     //Bing Image Search
     public static final int MAX_IMAGE_FILE_SIZE_IN_BYTES = 100000;
     public static final String BING_SEARCH_URL = "https://api.datamarket.azure.com/Bing/Search/v1/Composite";
     public static final String BING_SEARCH_API_TOKEN = "cTA/bL1Bs6OewmLcjfN8J6kK4Kjnos6NtstfKkb4WyY";
-
     public static final String PARSE_APP_ID = "UBeqkGHp8Ogwr2E1qVvZnCLdeju59J3CbZ4UGhwD";
     public static final String PARSE_CLIENT_KEY = "hJWDinPIZUAwqJzpZI1TtK4kvETD4zsiy2eEQa3I";
 
@@ -23,6 +21,7 @@ public class Constants {
 
     public static final String Wunderground_SEARCH_FORECAST_URL = "http://api.wunderground.com/api/234d02fb0dc009a1/forecast/q/";
 
+    //shared preferences keys
     public static final String TEMPERATURE_F = "TEMPERATURE_F";
     public static final String TEMPERATURE_C = "TEMPERATURE_C";
     public static final String ICON_URL = "ICON_URL";
@@ -47,9 +46,6 @@ public class Constants {
     public static final String FORECAST_IMAGE = "FORECAST_IMAGE";
     public static final String FORECAST_HUMIDITY = "FORECAST_HUMIDITY";
 
-    public static final String NOTIFICATION_WRONGZIPFORMAT = "WRONG ZIP FORMAT";
-
-    public static final String NOTIFICATION_GETWEATHER = "Getting Your Weather";
 
     public static final String TEMPDISPLAY = "TEMPDISPLAY";
     public static final String DAYDISPLAY = "DAYDISPLAY";

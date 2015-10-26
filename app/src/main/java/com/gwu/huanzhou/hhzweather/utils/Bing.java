@@ -2,7 +2,6 @@ package com.gwu.huanzhou.hhzweather.utils;
 
 import android.content.Context;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
 import android.util.Base64;
 
 import com.google.gson.JsonArray;
@@ -10,8 +9,6 @@ import com.google.gson.JsonObject;
 import com.gwu.huanzhou.hhzweather.Constants;
 import com.koushikdutta.ion.Ion;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.net.URL;
 
 /**
@@ -60,21 +57,5 @@ public class Bing {
         }
     }
 
-    public static boolean saveReactionImage(Bitmap bitmap, File directory){
-        File image = new File(directory,Constants.REACTION_IMAGE_FILE_NAME);
 
-        FileOutputStream outStream;
-        try {
-
-            outStream = new FileOutputStream(image);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, outStream);
-
-            outStream.flush();
-            outStream.close();
-        } catch (Exception e) {
-            return false;
-        }
-
-        return true;
-    }
 }

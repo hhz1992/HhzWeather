@@ -2,7 +2,6 @@ package com.gwu.huanzhou.hhzweather.activity;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -35,12 +34,10 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.gwu.huanzhou.hhzweather.Constants;
 import com.gwu.huanzhou.hhzweather.PersistanceManager;
 import com.gwu.huanzhou.hhzweather.R;
 import com.gwu.huanzhou.hhzweather.asynctask.BingImageSearchAsyncTask;
 import com.gwu.huanzhou.hhzweather.asynctask.ConditionSearchAsyncTask;
-import com.gwu.huanzhou.hhzweather.asynctask.LocationSearchAsyncTask;
 import com.gwu.huanzhou.hhzweather.model.Condition;
 import com.gwu.huanzhou.hhzweather.sensor.LocationFinder;
 import com.koushikdutta.async.future.FutureCallback;
@@ -48,29 +45,33 @@ import com.koushikdutta.ion.Ion;
 
 import java.net.URL;
 
-public class WeatherActivity extends AppCompatActivity implements LocationFinder.LocationDetector, LocationSearchAsyncTask.LocationSearchCompletionListener, ConditionSearchAsyncTask.ConditionSearchCompletionListener,BingImageSearchAsyncTask.ImageSearchCompletionListener {
+/**
+ * Created by Huanzhou on 2015/09/30.
+ * <p/>
+ * WeatherActivity is main activity in this app which gets current location of mobile and use location to send weather api calls. Then get json result and show
+ * the weather information. It also provides searching weather condition by zipcode. The background image will change according to the city which got by current location
+ * or zipcode. You can drag up or drag down the center circle to refresh the weather condition, which make whole process run again.
+ */
+public class WeatherActivity extends AppCompatActivity implements LocationFinder.LocationDetector, ConditionSearchAsyncTask.ConditionSearchCompletionListener, BingImageSearchAsyncTask.ImageSearchCompletionListener {
 
     private final String TAG = "WeatherActivity";
     private static final int LOCATION_ACCESS_REQUEST_CODE = 1;
 
     private ImageView mImageView;
     private ImageView mBackgroundView;
-
     private TextView mTextViewTemp;
     private TextView mTextViewWeather;
     private TextView mTextViewRelativeHumidity;
     private TextView mTextViewLocation;
     private LinearLayout mLinearLayoutRound;
     private TextView mTextViewNotification;
+    private EditText mEditTextZipcode;
 
     private PersistanceManager mPersistanceManager;
 
-    private EditText mEditTextZipcode;
     Activity activity;
-    ConditionSearchAsyncTask.ConditionSearchCompletionListener mConditionSearchCompletionListener  = this;
+    ConditionSearchAsyncTask.ConditionSearchCompletionListener mConditionSearchCompletionListener = this;
     LocationFinder.LocationDetector mLocationDetector = this;
-
-
     Condition condition;
     private boolean conditionFoundFlag = false;
 
@@ -78,8 +79,6 @@ public class WeatherActivity extends AppCompatActivity implements LocationFinder
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weather);
-        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        // setSupportActionBar(toolbar);
 
         activity = this;
 
@@ -91,10 +90,11 @@ public class WeatherActivity extends AppCompatActivity implements LocationFinder
         mTextViewRelativeHumidity = (TextView) findViewById(R.id.relative_humidity);
         mLinearLayoutRound = (LinearLayout) findViewById(R.id.round);
         mBackgroundView = (ImageView) findViewById(R.id.background);
-
         mTextViewLocation = (TextView) findViewById(R.id.location);
-        mTextViewNotification =  (TextView) findViewById(R.id.notification);
+        mTextViewNotification = (TextView) findViewById(R.id.notification);
 
+
+        //when get the location and weather, it will make the center circle flash
         final Animation animation = new AlphaAnimation(1, 0); // Change alpha from fully visible to invisible
         animation.setDuration(500); // duration - half a second
         animation.setInterpolator(new LinearInterpolator()); // do not alter animation rate
@@ -103,7 +103,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationFinder
 
         mLinearLayoutRound.startAnimation(animation);
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             //show dialog
             new AlertDialog.Builder(this)
                     .setTitle(R.string.location_permission_title)
@@ -119,7 +119,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationFinder
                     .show();
         }
 
-
+        //to make the center circle drag-able, which will detect the current coordinate and moved coordinate, and make animation
         mLinearLayoutRound.setOnTouchListener(new View.OnTouchListener() {
             float dY, y1, y2;
 
@@ -132,7 +132,6 @@ public class WeatherActivity extends AppCompatActivity implements LocationFinder
                 switch (event.getActionMasked()) {
 
                     case MotionEvent.ACTION_DOWN:
-
                         if (flag == false) {
                             flag = true;
                             roundY = v.getY();
@@ -141,60 +140,41 @@ public class WeatherActivity extends AppCompatActivity implements LocationFinder
                         dY = v.getY() - event.getRawY();
                         y1 = v.getY();
                         break;
-
                     case MotionEvent.ACTION_MOVE:
-
                         v.animate()
                                 .y(event.getRawY() + dY)
                                 .setDuration(0)
                                 .start();
                         break;
                     case MotionEvent.ACTION_UP:
-
                         y2 = v.getY();
-
                         if (Math.abs(y1 - y2) < 5) {
 
                             if (conditionFoundFlag) {
                                 Intent intent = new Intent(getBaseContext(), DetailedActivity.class);
                                 startActivity(intent);
                             }
-
-
                         } else {
-
                             v.animate()
                                     .y(roundY)
                                     .setDuration(1000)
                                     .start();
-
                             mLinearLayoutRound.startAnimation(animation);
-
-                            Context context = getApplicationContext();
-                            CharSequence text = "Getting Your Weather";
-                            int duration = Toast.LENGTH_LONG;
-
-                            Toast toast = Toast.makeText(context, text, duration);
-                            toast.show();
-                            new LocationFinder(getApplicationContext(),mLocationDetector).detectLocation();
-
+                            Toast.makeText(getApplicationContext(), R.string.NOTIFICATION_GETTINGWEATHER, Toast.LENGTH_LONG).show();
+                            //start a new finding location
+                            new LocationFinder(getApplicationContext(), mLocationDetector).detectLocation();
                         }
-
                         break;
-
                     default:
                         return false;
                 }
                 return true;
-
-
             }
         });
 
         LocationFinder locationFinder = new LocationFinder(this, this);
         locationFinder.detectLocation();
         mEditTextZipcode = (EditText) findViewById(R.id.zipcode);
-
 
         TextWatcher textWatcher = new TextWatcher() {
             @Override
@@ -209,45 +189,31 @@ public class WeatherActivity extends AppCompatActivity implements LocationFinder
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if(mEditTextZipcode.getText().length()==5){
 
-                    Context context = getApplicationContext();
-                    CharSequence text = Constants.NOTIFICATION_GETWEATHER;
-                    int duration = Toast.LENGTH_SHORT;
-                    Toast toast = Toast.makeText(context, text, duration);
-                    toast.show();
-                    System.out.println(mEditTextZipcode.getText());
-                    new ConditionSearchAsyncTask(getApplicationContext(),mConditionSearchCompletionListener).execute(mEditTextZipcode.getText().toString());
-
+                //when enter a five digital zipcode, then start searching weather by this zipcode
+                if (mEditTextZipcode.getText().length() == 5) {
+                    Toast.makeText(getApplicationContext(), R.string.NOTIFICATION_GETTINGWEATHER, Toast.LENGTH_LONG).show();
+                    new ConditionSearchAsyncTask(getApplicationContext(), mConditionSearchCompletionListener).execute(mEditTextZipcode.getText().toString());
+                } else {
                 }
-                else{
-
-
-                }
-
-
             }
         };
 
         mEditTextZipcode.addTextChangedListener(textWatcher);
 
-
-
-
     }
 
+    // when onResume, load setting from PersistanceManager to ensure the setting make effect
     @Override
-    protected void onResume(){
+    protected void onResume() {
         super.onResume();
 
-       if(condition!=null) {
-           if(mPersistanceManager.getCurrentTempDisplay()!=null && mPersistanceManager.getCurrentTempDisplay()!=""){
-               condition.setTEMPDISPLAY(mPersistanceManager.getCurrentTempDisplay());
-               mTextViewTemp.setText(condition.getTemperature());
-           }
-       }
-
-
+        if (condition != null) {
+            if (mPersistanceManager.getCurrentTempDisplay() != null && mPersistanceManager.getCurrentTempDisplay() != "") {
+                condition.setTEMPDISPLAY(mPersistanceManager.getCurrentTempDisplay());
+                mTextViewTemp.setText(condition.getTemperature());
+            }
+        }
     }
 
 
@@ -267,14 +233,12 @@ public class WeatherActivity extends AppCompatActivity implements LocationFinder
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            Log.d(TAG,"settings button pressed");
+            Log.d(TAG, "settings button pressed");
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
 
             return true;
         }
-
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -283,52 +247,35 @@ public class WeatherActivity extends AppCompatActivity implements LocationFinder
     public void locationFound(Location location) {
         //TODO: handle location success
 
-        System.out.println(location.getLatitude());
-        System.out.println(location.getLongitude());
-
-
+        //after finding a location, use Latitude and Longitude to get weather condition.
         ConditionSearchAsyncTask conditionTask = new ConditionSearchAsyncTask(this, this);
-       // LocationSearchAsyncTask locationTask = new LocationSearchAsyncTask(this, this);
-
         conditionTask.execute(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()));
-        //locationTask.execute(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()));
 
         Log.d(TAG, "location found");
     }
 
     @Override
     public void locationNotFound(LocationFinder.FailureReason reason) {
-        //TODO: handle location failure
+
+        //To infor user to check the GPS or use searching weather by zipcode
+        Toast.makeText(getApplicationContext(), R.string.NOTIFICATION_FAILTOGETLOCATION, Toast.LENGTH_LONG).show();
         Log.d(TAG, "location not found");
     }
 
-    @Override
-    public void WundergroundLocationFound(String zip) {
-        Log.d(TAG, "Wunderground Found " + zip);
-
-        //ConditionSearchAsyncTask task = new ConditionSearchAsyncTask(this, this);
-        //task.execute(zip);
-
-
-    }
-
-    @Override
-    public void WundergroundLocationNotFound() {
-
-        Log.d(TAG, "Wunderground NOT Found");
-    }
 
     @Override
     public void WundergroundConditionFound(Condition condition) {
 
+        //save the condition to PersistanceManager
         this.condition = condition;
-
         mPersistanceManager.saveConditionLocally(condition);
 
-        if(mPersistanceManager.getCurrentTempDisplay()!=null && mPersistanceManager.getCurrentTempDisplay()!=""){
+        //set the display mode
+        if (mPersistanceManager.getCurrentTempDisplay() != null && mPersistanceManager.getCurrentTempDisplay() != "") {
             condition.setTEMPDISPLAY(mPersistanceManager.getCurrentTempDisplay());
         }
 
+        //show the main layout of center circle
         mLinearLayoutRound.clearAnimation();
         mTextViewNotification.setVisibility(View.GONE);
 
@@ -341,31 +288,32 @@ public class WeatherActivity extends AppCompatActivity implements LocationFinder
         mTextViewTemp.setText(condition.getTemperature());
         mTextViewWeather.setText(condition.getmWeather());
         mTextViewRelativeHumidity.setText(condition.getmRelativeHumidity());
-
         mTextViewLocation.setText(condition.getmDisplaylocation().getmCity());
 
         conditionFoundFlag = true;
 
-
+        //In order to show location information in inner class
         final Condition conditionFinal = condition;
 
-        mTextViewLocation.setOnClickListener(new Button.OnClickListener(){
+        //make a popup windows and show the detailed location information of a city, including Country name, State name and City name.
+        //Once user click the city title, the windows will pop up
+        mTextViewLocation.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                Rect  locationOFLocationView = locateView(mTextViewLocation);
+                Rect locationOFLocationView = locateView(mTextViewLocation);
 
                 LayoutInflater layoutInflater
-                        = (LayoutInflater)getBaseContext()
+                        = (LayoutInflater) getBaseContext()
                         .getSystemService(LAYOUT_INFLATER_SERVICE);
                 View popupView = layoutInflater.inflate(R.layout.popup_locationinfo, null);
                 final PopupWindow popupWindow = new PopupWindow(
                         popupView,
                         ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT,true);
+                        ViewGroup.LayoutParams.WRAP_CONTENT, true);
 //
 
-                Button btnDismiss = (Button)popupView.findViewById(R.id.locationinfo_confirm);
+                Button btnDismiss = (Button) popupView.findViewById(R.id.locationinfo_confirm);
                 btnDismiss.setOnClickListener(new Button.OnClickListener() {
 
                     @Override
@@ -375,9 +323,9 @@ public class WeatherActivity extends AppCompatActivity implements LocationFinder
                     }
                 });
 
-                TextView  mTextViewLocationInfoCity =(TextView) popupView.findViewById(R.id.locationinfo_city);
-                TextView  mTextViewLocationInfoState=(TextView) popupView.findViewById(R.id.locationinfo_state);
-                TextView  mTextViewLocationInfoCountry=(TextView) popupView.findViewById(R.id.locationinfo_country);
+                TextView mTextViewLocationInfoCity = (TextView) popupView.findViewById(R.id.locationinfo_city);
+                TextView mTextViewLocationInfoState = (TextView) popupView.findViewById(R.id.locationinfo_state);
+                TextView mTextViewLocationInfoCountry = (TextView) popupView.findViewById(R.id.locationinfo_country);
 
                 mTextViewLocationInfoCity.setText(conditionFinal.getmDisplaylocation().getmCity());
                 mTextViewLocationInfoState.setText(conditionFinal.getmDisplaylocation().getmState());
@@ -385,9 +333,8 @@ public class WeatherActivity extends AppCompatActivity implements LocationFinder
 
                 popupWindow.showAtLocation(mTextViewLocation, Gravity.TOP | Gravity.LEFT, locationOFLocationView.left, locationOFLocationView.bottom);
 
-
-    }
-});
+            }
+        });
 
 
         BingImageSearchAsyncTask task = new BingImageSearchAsyncTask(this, this);
@@ -400,12 +347,11 @@ public class WeatherActivity extends AppCompatActivity implements LocationFinder
             public void onCompleted(Exception e, ImageView result) {
                 if (e == null) {
                     //yay
-                    System.out.println("image success");
 
                 } else {
-                    //TODO: handle image loading fail
-                    Log.d(TAG, "image failed to load");
-                    //skipQuestionDueToError();
+                    //log the error information , helping to check. Then keep running app without weather icon
+                    Log.d(TAG, "image failed to load " + e.toString());
+
                 }
             }
         });
@@ -415,7 +361,10 @@ public class WeatherActivity extends AppCompatActivity implements LocationFinder
 
     @Override
     public void WundergroundConditionNotFound() {
-        System.out.println("not found!");
+
+        //Nofity user to check internet or GPS, or change a zipcode or location
+        Toast.makeText(getApplicationContext(), R.string.NOTIFICATION_FAILTOGETWEATHER, Toast.LENGTH_LONG).show();
+        Log.d(TAG, "Condition failed to get ");
 
     }
 
@@ -426,11 +375,10 @@ public class WeatherActivity extends AppCompatActivity implements LocationFinder
             @Override
             public void onCompleted(Exception e, ImageView result) {
                 if (e == null) {
-                    //yay
 
                 } else {
-                    Log.d(TAG, "image failed to load");
-
+                    //log the error information  Then keep running app without weather icon
+                    Log.d(TAG, "image failed to load " + e.toString());
                 }
             }
         });
@@ -438,19 +386,18 @@ public class WeatherActivity extends AppCompatActivity implements LocationFinder
 
     @Override
     public void imageUrlNotFound() {
+        //log the error information  Then keep running app without weather icon
         Log.d(TAG, "image url not found");
 
     }
 
-    public  Rect locateView(View v)
-    {
+    // To location a view. Using in popup windows.
+    public Rect locateView(View v) {
         int[] loc_int = new int[2];
         if (v == null) return null;
-        try
-        {
+        try {
             v.getLocationOnScreen(loc_int);
-        } catch (NullPointerException npe)
-        {
+        } catch (NullPointerException npe) {
             //Happens when the view doesn't exist on screen anymore.
             return null;
         }
@@ -461,12 +408,6 @@ public class WeatherActivity extends AppCompatActivity implements LocationFinder
         location.bottom = location.top + v.getHeight();
         return location;
     }
-
-
-//    private void callPopup() {
-//
-
-
 
 
 }
