@@ -28,6 +28,8 @@
             android:id="@+id/activity_settings_temp_display"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:entries="@array/temp_display_arrays"
+            android:textSize="20dp"
             android:layout_weight="1"/>
 
     </LinearLayout>
@@ -35,7 +37,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/activity_vertical_margin">
 
         <TextView
             android:id="@+id/activity_settings_day_text"
@@ -44,13 +47,16 @@
             android:layout_weight="1"
             android:text="@string/activity_settings_day"
             android:textSize="20dp"
+
             android:gravity="center"/>
 
         <Spinner
             android:id="@+id/activity_settings_day_display"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:textSize="20dp"
+            android:entries="@array/day_display_arrays"/>
 
     </LinearLayout>
 

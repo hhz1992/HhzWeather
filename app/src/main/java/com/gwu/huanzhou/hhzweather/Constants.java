@@ -51,5 +51,8 @@ public class Constants {
 
     public static final String NOTIFICATION_GETWEATHER = "Getting Your Weather";
 
+    public static final String TEMPDISPLAY = "TEMPDISPLAY";
+    public static final String DAYDISPLAY = "DAYDISPLAY";
+
 
 }

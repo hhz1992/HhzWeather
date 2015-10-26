@@ -66,5 +66,33 @@ public class PersistanceManager {
         return true;
     }
 
+    public String getCurrentTempDisplay() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        return sharedPreferences.getString(Constants.TEMPDISPLAY, "");
+    }
+
+
+    public void saveTempDisplay(String tempDisplay) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putString(Constants.TEMPDISPLAY, tempDisplay);
+        editor.apply();
+    }
+
+    public String getCurrentDayDisplay() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        return sharedPreferences.getString(Constants.DAYDISPLAY, "");
+    }
+
+
+    public void saveDayDisplay(String dayDisplay) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putString(Constants.DAYDISPLAY, dayDisplay);
+        editor.apply();
+    }
+
 
 }

@@ -26,6 +26,17 @@
     <string name="activity_settings_day">Number Of Days To Forecast</string>
 
 
+    <string-array name="temp_display_arrays">
+        <item>Fahrenheit</item>
+        <item>Celsius</item>
+    </string-array>
 
+    <string-array name="day_display_arrays">
+        <item>One</item>
+        <item>Two</item>
+        <item>Three</item>
+        <item>Four</item>
+
+    </string-array>
 
 </resources>
