@@ -47,6 +47,10 @@ public class PersistanceManager {
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
 
+        if(this.getCurrentTempDisplay()!=null && this.getCurrentTempDisplay()!=""){
+            condition.setTEMPDISPLAY(this.getCurrentTempDisplay());
+        }
+
         condition.setmIconUrl(sharedPreferences.getString(Constants.ICON_URL, ""));
         condition.setmTemperatureF(sharedPreferences.getString(Constants.TEMPERATURE_F, ""));
         condition.setmTemperatureC(sharedPreferences.getString(Constants.TEMPERATURE_C, ""));

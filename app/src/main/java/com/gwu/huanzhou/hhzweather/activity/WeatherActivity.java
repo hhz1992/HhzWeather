@@ -56,7 +56,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationFinder
     private ImageView mImageView;
     private ImageView mBackgroundView;
 
-    private TextView mTextViewTempF;
+    private TextView mTextViewTemp;
     private TextView mTextViewWeather;
     private TextView mTextViewRelativeHumidity;
     private TextView mTextViewLocation;
@@ -86,7 +86,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationFinder
         mPersistanceManager = new PersistanceManager(this);
 
         mImageView = (ImageView) findViewById(R.id.image);
-        mTextViewTempF = (TextView) findViewById(R.id.temp_f);
+        mTextViewTemp = (TextView) findViewById(R.id.temp);
         mTextViewWeather = (TextView) findViewById(R.id.weather);
         mTextViewRelativeHumidity = (TextView) findViewById(R.id.relative_humidity);
         mLinearLayoutRound = (LinearLayout) findViewById(R.id.round);
@@ -193,12 +193,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationFinder
 
         LocationFinder locationFinder = new LocationFinder(this, this);
         locationFinder.detectLocation();
-
-
-
         mEditTextZipcode = (EditText) findViewById(R.id.zipcode);
-
-
 
 
         TextWatcher textWatcher = new TextWatcher() {
@@ -315,18 +310,20 @@ public class WeatherActivity extends AppCompatActivity implements LocationFinder
 
         mPersistanceManager.saveConditionLocally(condition);
 
-        System.out.println(condition.getmWeather());
+        if(mPersistanceManager.getCurrentTempDisplay()!=null && mPersistanceManager.getCurrentTempDisplay()!=""){
+            condition.setTEMPDISPLAY(mPersistanceManager.getCurrentTempDisplay());
+        }
 
         mLinearLayoutRound.clearAnimation();
         mTextViewNotification.setVisibility(View.GONE);
 
-        mTextViewTempF.setVisibility(View.VISIBLE);
+        mTextViewTemp.setVisibility(View.VISIBLE);
         mTextViewWeather.setVisibility(View.VISIBLE);
         mTextViewRelativeHumidity.setVisibility(View.VISIBLE);
         mTextViewLocation.setVisibility(View.VISIBLE);
         mImageView.setVisibility(View.VISIBLE);
 
-        mTextViewTempF.setText(condition.getmTemperatureF());
+        mTextViewTemp.setText(condition.getTemperature());
         mTextViewWeather.setText(condition.getmWeather());
         mTextViewRelativeHumidity.setText(condition.getmRelativeHumidity());
 
@@ -413,11 +410,10 @@ public class WeatherActivity extends AppCompatActivity implements LocationFinder
         Ion.with(mBackgroundView).load(url.toString()).setCallback(new FutureCallback<ImageView>() {
             @Override
             public void onCompleted(Exception e, ImageView result) {
-                if(e == null){
+                if (e == null) {
                     //yay
 
-                }
-                else{
+                } else {
                     Log.d(TAG, "image failed to load");
 
                 }

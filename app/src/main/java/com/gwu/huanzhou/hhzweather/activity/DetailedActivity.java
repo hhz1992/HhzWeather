@@ -39,6 +39,8 @@ public class DetailedActivity extends AppCompatActivity  implements ForeCastSear
 
     private ListView mdDetailedForcast;
 
+    private int mDayDisplay = 4;
+
     private PersistanceManager mPersistanceManager;
 
     Condition condition;
@@ -64,9 +66,9 @@ public class DetailedActivity extends AppCompatActivity  implements ForeCastSear
         mDetailedWinddir = (TextView)findViewById(R.id.detailed_winddir);
 
         mPersistanceManager.getCurrentCondition(condition);
-        mDetailedTemp.setText(condition.getmTemperatureF());
+        mDetailedTemp.setText(condition.getTemperature());
         mDetailedHumidity.setText(condition.getmRelativeHumidity());
-        mDetailedDewpoint.setText(condition.getmDewpointF());
+        mDetailedDewpoint.setText(condition.getDewpoint());
         mDetailedVisibility.setText(condition.getmVisibilityMi());
         mDetailedPressure.setText(condition.getmPressureIn());
         mDetailedWindmph.setText(condition.getmWindMph());
@@ -91,7 +93,6 @@ public class DetailedActivity extends AppCompatActivity  implements ForeCastSear
         forecastTask.execute(condition.getmDisplaylocation().getmState(), condition.getmDisplaylocation().getmCity());
 
 
-
     }
 
     @Override
@@ -99,18 +100,27 @@ public class DetailedActivity extends AppCompatActivity  implements ForeCastSear
 
 
         ArrayList list=new ArrayList<HashMap<String,String>>();
+        setmDayDisplay();
 
+        int displayNum = forecasts.size();
+        if(forecasts.size()>=mDayDisplay){
+            displayNum = mDayDisplay;
+        }
 
-        for(int i=0; i<forecasts.size();i++){
+        for(int i=0; i<displayNum;i++){
             HashMap<String,String> temp=new HashMap<String, String>();
+
+            if(mPersistanceManager.getCurrentTempDisplay()!=null && mPersistanceManager.getCurrentTempDisplay()!=""){
+                forecasts.get(i).setTEMPDISPLAY(mPersistanceManager.getCurrentTempDisplay());
+            }
+
             temp.put(Constants.FORECAST_DAY, forecasts.get(i).getmWeekday());
             temp.put(Constants.FORECAST_IMAGE, forecasts.get(i).getmIconUrl());
-            temp.put(Constants.FORECAST_HIGHTEMP, forecasts.get(i).getmHighTempF());
-            temp.put(Constants.FORECAST_LOWTEMP, forecasts.get(i).getmLowTempF());
+            temp.put(Constants.FORECAST_HIGHTEMP, forecasts.get(i).getHighTemp());
+            temp.put(Constants.FORECAST_LOWTEMP, forecasts.get(i).getLowTemp());
             temp.put(Constants.FORECAST_HUMIDITY,forecasts.get(i).getMmAveHumidity());
             list.add(temp);
         }
-
 
         mdDetailedForcast = (ListView)findViewById(R.id.forecast_list);
         ListViewAdapters adapter=new ListViewAdapters(this, list);
@@ -123,4 +133,21 @@ public class DetailedActivity extends AppCompatActivity  implements ForeCastSear
     public void WundergroundForecastNotFound() {
 
     }
+
+    public void setmDayDisplay(){
+
+        String dayDisplay = mPersistanceManager.getCurrentDayDisplay();
+
+        if(dayDisplay.equals(Constants.One)){
+            mDayDisplay = 1;
+        }else if(dayDisplay.equals(Constants.Two)) {
+            mDayDisplay = 2;
+        }else if(dayDisplay.equals(Constants.Three)) {
+            mDayDisplay = 3;
+        }else if(dayDisplay.equals(Constants.Four)) {
+            mDayDisplay = 4;
+        }
+    }
+
+
 }

@@ -54,5 +54,10 @@ public class Constants {
     public static final String TEMPDISPLAY = "TEMPDISPLAY";
     public static final String DAYDISPLAY = "DAYDISPLAY";
 
+    public static final String One = "One";
+    public static final String Two = "Two";
+    public static final String Three = "Three";
+    public static final String Four = "Four";
+
 
 }

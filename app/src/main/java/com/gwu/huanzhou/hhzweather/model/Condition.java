@@ -20,7 +20,33 @@ public class Condition {
     private String mVisibilityMi;
     private String mPressureIn;
 
+    private final String FAHRENHEIT = "Fahrenheit";
+    private final String CELSIUS  = "Celsius";
+
+    private String TEMPDISPLAY = FAHRENHEIT;
+
     private Displaylocation mDisplaylocation;
+
+    public String getTemperature() {
+        if(TEMPDISPLAY.equals(FAHRENHEIT))
+            return mTemperatureF;
+        else if(TEMPDISPLAY.equals(CELSIUS))
+            return mTemperatureC;
+        else return null;
+    }
+
+    public String getDewpoint() {
+        if(TEMPDISPLAY.equals(FAHRENHEIT))
+            return mDewpointF;
+        else if(TEMPDISPLAY.equals(CELSIUS))
+            return mDewpointC;
+        else return null;
+    }
+
+    public void setTEMPDISPLAY(String TEMPDISPLAY) {
+        this.TEMPDISPLAY = TEMPDISPLAY;
+    }
+
 
     public String getmWeather() {
         return mWeather;

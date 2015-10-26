@@ -13,6 +13,31 @@ public class Forecast {
     private String mLowTempC;
     private String mmAveHumidity;
 
+    private final String FAHRENHEIT = "Fahrenheit";
+    private final String CELSIUS  = "Celsius";
+
+    private String TEMPDISPLAY = FAHRENHEIT;
+
+    public String getHighTemp() {
+        if(TEMPDISPLAY.equals(FAHRENHEIT))
+            return mHighTempF;
+        else if(TEMPDISPLAY.equals(CELSIUS))
+            return mHighTempC;
+        else return null;
+    }
+
+    public String getLowTemp() {
+        if(TEMPDISPLAY.equals(FAHRENHEIT))
+            return mLowTempF;
+        else if(TEMPDISPLAY.equals(CELSIUS))
+            return mLowTempC;
+        else return null;
+    }
+
+    public void setTEMPDISPLAY(String TEMPDISPLAY) {
+        this.TEMPDISPLAY = TEMPDISPLAY;
+    }
+
     public String getmWeekday() {
         return mWeekday;
     }
