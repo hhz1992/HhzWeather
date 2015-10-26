@@ -18,5 +18,11 @@
     <string name="detailed_activity_lowtemp">LOWTEMP</string>
     <string name="detailed_activity_avehumidity">HUMIDITY</string>
 
+    <string name="confirm">confirm</string>
+    <string name="zipcode">ZipCode</string>
+
+
+
+
 
 </resources>

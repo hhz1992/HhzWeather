@@ -47,5 +47,9 @@ public class Constants {
     public static final String FORECAST_IMAGE = "FORECAST_IMAGE";
     public static final String FORECAST_HUMIDITY = "FORECAST_HUMIDITY";
 
+    public static final String NOTIFICATION_WRONGZIPFORMAT = "WRONG ZIP FORMAT";
+
+    public static final String NOTIFICATION_GETWEATHER = "Getting Your Weather";
+
 
 }

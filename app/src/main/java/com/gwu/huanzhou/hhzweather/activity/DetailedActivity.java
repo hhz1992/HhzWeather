@@ -99,21 +99,7 @@ public class DetailedActivity extends AppCompatActivity  implements ForeCastSear
 
 
         ArrayList list=new ArrayList<HashMap<String,String>>();
-
-//        HashMap<String,String> temp=new HashMap<String, String>();
-//        temp.put(Constants.FIRST_COLUMN, "Ankit Karia");
-//        temp.put(Constants.SECOND_COLUMN, "Male");
-//        temp.put(Constants.THIRD_COLUMN, "22");
-//        temp.put(Constants.FOURTH_COLUMN, "Unmarried");
-//        list.add(temp);
-//
-//        HashMap<String,String> temp2=new HashMap<String, String>();
-//        temp2.put(Constants.FIRST_COLUMN, "Rajat Ghai");
-//        temp2.put(Constants.SECOND_COLUMN, "Male");
-//        temp2.put(Constants.THIRD_COLUMN, "25");
-//        temp2.put(Constants.FOURTH_COLUMN, "Unmarried");
-//        list.add(temp2);
-
+        
 
         for(int i=0; i<forecasts.size();i++){
             HashMap<String,String> temp=new HashMap<String, String>();

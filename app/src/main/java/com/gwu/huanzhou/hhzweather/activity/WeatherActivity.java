@@ -1,10 +1,12 @@
 package com.gwu.huanzhou.hhzweather.activity;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Rect;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,19 +14,28 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.gwu.huanzhou.hhzweather.Constants;
 import com.gwu.huanzhou.hhzweather.PersistanceManager;
 import com.gwu.huanzhou.hhzweather.R;
 import com.gwu.huanzhou.hhzweather.asynctask.BingImageSearchAsyncTask;
@@ -54,6 +65,12 @@ public class WeatherActivity extends AppCompatActivity implements LocationFinder
 
     private PersistanceManager mPersistanceManager;
 
+    private EditText mEditTextZipcode;
+    Activity activity;
+    ConditionSearchAsyncTask.ConditionSearchCompletionListener inter = this;
+
+
+
     Condition condition;
     private boolean conditionFoundFlag = false;
 
@@ -63,6 +80,8 @@ public class WeatherActivity extends AppCompatActivity implements LocationFinder
         setContentView(R.layout.activity_weather);
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         // setSupportActionBar(toolbar);
+
+        activity = this;
 
         mPersistanceManager = new PersistanceManager(this);
 
@@ -136,7 +155,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationFinder
 
                         if (Math.abs(y1 - y2) < 5) {
 
-                            if(conditionFoundFlag) {
+                            if (conditionFoundFlag) {
                                 Intent intent = new Intent(getBaseContext(), DetailedActivity.class);
                                 startActivity(intent);
                             }
@@ -174,6 +193,51 @@ public class WeatherActivity extends AppCompatActivity implements LocationFinder
 
         LocationFinder locationFinder = new LocationFinder(this, this);
         locationFinder.detectLocation();
+
+
+
+        mEditTextZipcode = (EditText) findViewById(R.id.zipcode);
+
+
+
+
+        TextWatcher textWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if(mEditTextZipcode.getText().length()==5){
+
+                    Context context = getApplicationContext();
+                    CharSequence text = Constants.NOTIFICATION_GETWEATHER;
+                    int duration = Toast.LENGTH_SHORT;
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
+                    System.out.println(mEditTextZipcode.getText());
+                    new ConditionSearchAsyncTask(getApplicationContext(),inter).execute(mEditTextZipcode.getText().toString());
+
+                }
+                else{
+
+
+                }
+
+
+            }
+        };
+
+        mEditTextZipcode.addTextChangedListener(textWatcher);
+
+
+
 
     }
 
@@ -214,6 +278,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationFinder
 
         System.out.println(location.getLatitude());
         System.out.println(location.getLongitude());
+
 
         ConditionSearchAsyncTask conditionTask = new ConditionSearchAsyncTask(this, this);
        // LocationSearchAsyncTask locationTask = new LocationSearchAsyncTask(this, this);
@@ -273,11 +338,53 @@ public class WeatherActivity extends AppCompatActivity implements LocationFinder
         conditionFoundFlag = true;
 
 
+        final Condition conditionFinal = condition;
+
+        mTextViewLocation.setOnClickListener(new Button.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+
+                Rect  locationOFLocationView = locateView(mTextViewLocation);
+
+                LayoutInflater layoutInflater
+                        = (LayoutInflater)getBaseContext()
+                        .getSystemService(LAYOUT_INFLATER_SERVICE);
+                View popupView = layoutInflater.inflate(R.layout.popup_locationinfo, null);
+                final PopupWindow popupWindow = new PopupWindow(
+                        popupView,
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT,true);
+//
+
+                Button btnDismiss = (Button)popupView.findViewById(R.id.locationinfo_confirm);
+                btnDismiss.setOnClickListener(new Button.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        // TODO Auto-generated method stub
+                        popupWindow.dismiss();
+                    }
+                });
+
+                TextView  mTextViewLocationInfoCity =(TextView) popupView.findViewById(R.id.locationinfo_city);
+                TextView  mTextViewLocationInfoState=(TextView) popupView.findViewById(R.id.locationinfo_state);
+                TextView  mTextViewLocationInfoCountry=(TextView) popupView.findViewById(R.id.locationinfo_country);
+
+                mTextViewLocationInfoCity.setText(conditionFinal.getmDisplaylocation().getmCity());
+                mTextViewLocationInfoState.setText(conditionFinal.getmDisplaylocation().getmState());
+                mTextViewLocationInfoCountry.setText(conditionFinal.getmDisplaylocation().getmCountry());
+
+                popupWindow.showAtLocation(mTextViewLocation, Gravity.TOP | Gravity.LEFT, locationOFLocationView.left, locationOFLocationView.bottom);
+
+
+    }
+});
+
+
         BingImageSearchAsyncTask task = new BingImageSearchAsyncTask(this, this);
 
         System.out.println(condition.getmDisplaylocation().getmCity());
         task.execute(condition.getmDisplaylocation().getmCity());
-
 
         Ion.with(mImageView).load(condition.getmIconUrl()).setCallback(new FutureCallback<ImageView>() {
             @Override
@@ -299,6 +406,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationFinder
 
     @Override
     public void WundergroundConditionNotFound() {
+        System.out.println("not found!");
 
     }
 
@@ -325,5 +433,32 @@ public class WeatherActivity extends AppCompatActivity implements LocationFinder
         Log.d(TAG, "image url not found");
 
     }
+
+    public  Rect locateView(View v)
+    {
+        int[] loc_int = new int[2];
+        if (v == null) return null;
+        try
+        {
+            v.getLocationOnScreen(loc_int);
+        } catch (NullPointerException npe)
+        {
+            //Happens when the view doesn't exist on screen anymore.
+            return null;
+        }
+        Rect location = new Rect();
+        location.left = loc_int[0];
+        location.top = loc_int[1];
+        location.right = location.left + v.getWidth();
+        location.bottom = location.top + v.getHeight();
+        return location;
+    }
+
+
+//    private void callPopup() {
+//
+
+
+
 
 }

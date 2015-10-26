@@ -110,6 +110,19 @@
 
             <!-- 70% Width End-->
 
+
+            <EditText
+                android:id="@+id/zipcode"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/zipcode"
+                android:inputType="number"
+                android:textSize="30dp"
+                android:gravity="center_horizontal"
+                android:layout_alignParentBottom="true"
+                android:singleLine="true"/>
+
+
         </RelativeLayout>
 
         <RelativeLayout
