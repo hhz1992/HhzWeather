@@ -1,136 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:fitsSystemWindows="true"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context=".WeatherActivity">
 
     <ImageView
         android:id="@+id/background"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:src="@drawable/background"
         android:scaleType="fitXY"
-        />
+        android:src="@drawable/background" />
 
-    <LinearLayout  android:layout_width="match_parent"
-        android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    <LinearLayout
+        android:id="@+id/root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
-        android:paddingBottom="@dimen/activity_vertical_margin"
+
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-
-        tools:showIn="@layout/activity_weather" tools:context=".WeatherActivity"
-        android:id="@+id/root">
-
-
-        <RelativeLayout
-            android:layout_width="0dip"
-            android:layout_height="fill_parent"
-            android:layout_weight="0.15">
-        </RelativeLayout>
+        tools:context=".WeatherActivity"
+        tools:showIn="@layout/activity_weather">
 
 
         <RelativeLayout
             android:layout_width="0dip"
             android:layout_height="fill_parent"
-            android:layout_weight="0.7"
-            android:id="@+id/centre">
+            android:layout_weight="0.15"></RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/centre"
+            android:layout_width="0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.7">
 
             <TextView
                 android:id="@+id/location"
 
-                android:layout_alignParentTop="true"
-                android:layout_centerInParent="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
-                android:textSize="30dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerInParent="true"
                 android:textColor="#FFFFFF"
-                />
+                android:textSize="30dp" />
 
 
             <LinearLayout
                 android:id="@+id/round"
-                android:clickable="true"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:orientation="vertical"
-                android:background="@drawable/circle">
+                android:background="@drawable/circle"
+                android:clickable="true"
+                android:orientation="vertical">
 
 
                 <ImageView
                     android:id="@+id/image"
-                    android:layout_gravity="center"
                     android:layout_width="250px"
                     android:layout_height="250px"
-                    />
+                    android:layout_gravity="center" />
 
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:id="@+id/temp_f"
-
-                    android:textSize="80dp"
-                    android:textColor="#FFFFFF"
-                    android:layout_gravity="center"
-                    />
-
-                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textColor="#FFFFFF"
+                    android:textSize="80dp" />
+
+                <TextView
                     android:id="@+id/weather"
-
-                    android:textSize="20dp"
-                    android:textColor="#FFFFFF"
-                    android:layout_gravity="center"
-                    />
-
-                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+
+                    android:layout_gravity="center"
+                    android:textColor="#FFFFFF"
+                    android:textSize="20dp" />
+
+                <TextView
                     android:id="@+id/relative_humidity"
-
-                    android:textSize="20dp"
-                    android:textColor="#FFFFFF"
-                    android:layout_gravity="center"
-                    />
-
-                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/notification"
-                    android:text="Getting Your Weather"
-                    android:textSize="25dp"
+                    android:layout_gravity="center"
                     android:textColor="#FFFFFF"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/notification"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="-150dp"
-                    />
-
+                    android:text="Getting Your Weather"
+                    android:textColor="#FFFFFF"
+                    android:textSize="25dp" />
 
 
             </LinearLayout>
-
-
 
             <!-- This is the part that's 70% of the total width. I'm inserting a LinearLayout and buttons.-->
 
             <!-- 70% Width End-->
 
         </RelativeLayout>
+
         <RelativeLayout
             android:layout_width="0dip"
             android:layout_height="fill_parent"
-            android:layout_weight="0.15">
-        </RelativeLayout>
+            android:layout_weight="0.15"></RelativeLayout>
 
 
-    </LinearLayout >
-
-
+    </LinearLayout>
 
 
 </android.support.design.widget.CoordinatorLayout>

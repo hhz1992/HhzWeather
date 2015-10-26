@@ -82,12 +82,17 @@ public class Wunderground {
 
             condition.setmWeather(conditionResult.get("weather").getAsString());
             condition.setmTemperatureString(conditionResult.get("temperature_string").getAsString());
-            condition.setmTemperatureF(conditionResult.get("temp_f").getAsString()+" F");
-            condition.setmTemperatureC(conditionResult.get("temp_c").getAsString()+" C");
+            condition.setmTemperatureF(conditionResult.get("temp_f").getAsString() + " F");
+            condition.setmTemperatureC(conditionResult.get("temp_c").getAsString() + " C");
 
             condition.setmWind(conditionResult.get("wind_string").getAsString());
             condition.setmRelativeHumidity(conditionResult.get("relative_humidity").getAsString());
             condition.setmIconUrl(conditionResult.get("icon_url").getAsString());
+
+            condition.setmDewpointC(conditionResult.get("dewpoint_c").getAsString()+ " C");
+            condition.setmDewpointF(conditionResult.get("dewpoint_f").getAsString() + " F");
+            condition.setmPressureIn(conditionResult.get("pressure_in").getAsString());
+            condition.setmVisibilityMi(conditionResult.get("visibility_mi").getAsString() + " Mi");
 
             JsonObject displayLocationJson = conditionResult.getAsJsonObject("display_location");
             Displaylocation displaylocation = new Displaylocation();

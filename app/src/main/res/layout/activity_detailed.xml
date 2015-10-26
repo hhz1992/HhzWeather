@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:fitsSystemWindows="true"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context="com.gwu.huanzhou.hhzweather.activity.DetailedActivity">
 
 
@@ -11,46 +12,123 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@android:color/holo_purple"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/activity_vertical_margin"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
-        android:paddingBottom="@dimen/activity_vertical_margin"
-        android:orientation="vertical"
-        android:background="@android:color/holo_blue_light"
-       >
+        android:paddingTop="@dimen/activity_vertical_margin">
 
-        <TextView
-            android:id="@+id/detailed_weather"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text"
-            android:textColor="@android:color/white"
-            android:textColorHint="@android:color/white"
-            android:textSize="40dp"
-            android:hint="hi"/>
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/detailed_wind"
+            <TextView
+                android:id="@+id/detailed_temp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="hi"
+                android:inputType="text"
+                android:textColor="@android:color/white"
+                android:textColorHint="@android:color/white"
+                android:textSize="80dp"
+                android:layout_weight="0.5"
+                android:layout_gravity="center"/>
+
+            <ImageView
+                android:id="@+id/detailed_image"
+                android:layout_width="match_parent"
+                android:layout_height="200px"
+                android:layout_gravity="center"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="number"
-            android:textColor="@android:color/white"
-            android:textColorHint="@android:color/white"
-            android:textSize="40dp"
-            android:hint="hello"/>
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/detailed_humidity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="hi"
+                android:textColor="@android:color/white"
+                android:textColorHint="@android:color/white"
+                android:textSize="30dp"
+                android:gravity="center"
+                />
+
+            <TextView
+                android:id="@+id/detailed_dewpoint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:textColorHint="@android:color/white"
+                android:textSize="30dp"
+                android:hint="hi"
+                android:layout_weight="1"
+                android:gravity="center"
+                />
+
+            <TextView
+                android:id="@+id/detailed_visibility"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:textColorHint="@android:color/white"
+                android:textSize="30dp"
+                android:hint="hi"
+                android:layout_weight="1"
+                android:gravity="center"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/detailed_humidity_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="HUMIDITY"
+                android:textColor="@android:color/holo_blue_light"
+                android:textSize="20dp"
+                android:gravity="center"/>
+
+
+            <TextView
+                android:id="@+id/detailed_dewpoint_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="20dp"
+                android:text="DEWPOIUNT"
+                android:textColor="@android:color/holo_blue_light"
+                android:gravity="center"
+                />
+
+            <TextView
+                android:id="@+id/detailed_visibility_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="20dp"
+                android:text="VISIBILITY"
+                android:textColor="@android:color/holo_blue_light"
+                android:gravity="center"
+                />
+        </LinearLayout>
+
+
 
     </LinearLayout>
-
-
-
-
-
-
-
-
-
-
-
 
 
 </android.support.design.widget.CoordinatorLayout>

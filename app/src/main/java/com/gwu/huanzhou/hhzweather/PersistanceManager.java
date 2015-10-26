@@ -30,13 +30,18 @@ public class PersistanceManager {
         editor.putString(Constants.CITY, condition.getmDisplaylocation().getmCity());
         editor.putString(Constants.STATE, condition.getmDisplaylocation().getmState());
         editor.putString(Constants.COUNTRY, condition.getmDisplaylocation().getmCountry());
+        editor.putString(Constants.DEWPOINT_F, condition.getmDewpointF());
+        editor.putString(Constants.DEWPOINT_C, condition.getmDewpointC());
+        editor.putString(Constants.VISIBILITY_MI, condition.getmVisibilityMi());
+        editor.putString(Constants.PRESSURE_IN, condition.getmPressureIn());
+
         editor.apply();
 
         return true;
 
     }
 
-    public boolean getCurrentCondition(Condition condition){
+    public boolean getCurrentCondition(Condition condition) {
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
 
@@ -48,7 +53,11 @@ public class PersistanceManager {
         condition.setmWeather(sharedPreferences.getString(Constants.WEATHER, ""));
         condition.getmDisplaylocation().setmCity(sharedPreferences.getString(Constants.CITY, ""));
         condition.getmDisplaylocation().setmCountry(sharedPreferences.getString(Constants.COUNTRY, ""));
-        condition.getmDisplaylocation().setmState(sharedPreferences.getString(Constants.STATE,""));
+        condition.getmDisplaylocation().setmState(sharedPreferences.getString(Constants.STATE, ""));
+        condition.setmDewpointF(sharedPreferences.getString(Constants.DEWPOINT_F, ""));
+        condition.setmDewpointC(sharedPreferences.getString(Constants.DEWPOINT_C, ""));
+        condition.setmVisibilityMi(sharedPreferences.getString(Constants.VISIBILITY_MI, ""));
+        condition.setmPressureIn(sharedPreferences.getString(Constants.PRESSURE_IN, ""));
 
         return true;
     }
