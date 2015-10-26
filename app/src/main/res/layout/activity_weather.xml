@@ -48,7 +48,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_centerInParent="true"
                 android:textColor="#FFFFFF"
-                android:textSize="30dp" />
+                android:textSize="@dimen/activity_weather_front_location" />
 
 
             <LinearLayout
@@ -63,8 +63,8 @@
 
                 <ImageView
                     android:id="@+id/image"
-                    android:layout_width="250px"
-                    android:layout_height="250px"
+                    android:layout_width="@dimen/activity_weather_image_width"
+                    android:layout_height="@dimen/activity_weather_image_height"
                     android:layout_gravity="center" />
 
 
@@ -74,16 +74,15 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:textColor="#FFFFFF"
-                    android:textSize="80dp" />
+                    android:textSize="@dimen/activity_weather_front_temp" />
 
                 <TextView
                     android:id="@+id/weather"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
                     android:layout_gravity="center"
                     android:textColor="#FFFFFF"
-                    android:textSize="20dp" />
+                    android:textSize="@dimen/activity_weather_front_weather" />
 
                 <TextView
                     android:id="@+id/relative_humidity"
@@ -91,7 +90,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:textColor="#FFFFFF"
-                    android:textSize="20dp" />
+                    android:textSize="@dimen/activity_weather_front_humidity" />
 
                 <TextView
                     android:id="@+id/notification"
@@ -99,9 +98,9 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="-150dp"
-                    android:text="Getting Your Weather"
+                    android:text="@string/NOTIFICATION_GETTINGWEATHER"
                     android:textColor="#FFFFFF"
-                    android:textSize="25dp" />
+                    android:textSize="@dimen/activity_weather_front_notification" />
 
 
             </LinearLayout>
@@ -117,11 +116,10 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/zipcode"
                 android:inputType="number"
-                android:textSize="30dp"
+                android:textSize="@dimen/activity_weather_front_zipcode"
                 android:gravity="center_horizontal"
                 android:layout_alignParentBottom="true"
                 android:singleLine="true"/>
-
 
         </RelativeLayout>
 

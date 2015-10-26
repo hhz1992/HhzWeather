@@ -3,4 +3,16 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="activity_weather_front_temp">80dp</dimen>
+    <dimen name="activity_weather_front_location">30dp</dimen>
+    <dimen name="activity_weather_image_width">250px</dimen>
+    <dimen name="activity_weather_image_height">250px</dimen>
+    <dimen name="activity_weather_front_humidity">20dp</dimen>
+    <dimen name="activity_weather_front_weather">20dp</dimen>
+    <dimen name="activity_weather_front_notification">25dp</dimen>
+    <dimen name="activity_weather_front_zipcode">30dp</dimen>
+
+
+
+
 </resources>
