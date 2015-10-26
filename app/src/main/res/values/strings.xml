@@ -20,7 +20,10 @@
 
     <string name="confirm">confirm</string>
     <string name="zipcode">ZipCode</string>
+    <string name="title_activity_settings">Settings</string>
 
+    <string name="activity_settings_temp">Temperature Display</string>
+    <string name="activity_settings_day">Number Of Days To Forecast</string>
 
 
 

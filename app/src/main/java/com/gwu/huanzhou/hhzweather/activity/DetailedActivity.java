@@ -99,7 +99,7 @@ public class DetailedActivity extends AppCompatActivity  implements ForeCastSear
 
 
         ArrayList list=new ArrayList<HashMap<String,String>>();
-        
+
 
         for(int i=0; i<forecasts.size();i++){
             HashMap<String,String> temp=new HashMap<String, String>();
