@@ -200,6 +200,83 @@
                 />
         </LinearLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            />
+
+        <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+
+        <TextView
+            android:id="@+id/forcast_day_lable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/detailed_activity_weekday"
+            android:textSize="13dp"
+            android:layout_weight="1"
+            android:textColor="@android:color/holo_blue_light"
+            android:gravity="center">
+        </TextView>
+
+        <TextView
+            android:id="@+id/forcast_image_lable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/detailed_activity_weather"
+            android:textSize="13dp"
+            android:layout_weight="1"
+            android:textColor="@android:color/holo_blue_light"
+            android:gravity="center">
+        </TextView>
+
+        <TextView
+            android:id="@+id/forcast_hightemp_lable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/detailed_activity_hightemp"
+            android:textSize="13dp"
+            android:layout_weight="1"
+            android:textColor="@android:color/holo_blue_light"
+            android:gravity="center">
+        </TextView>
+
+        <TextView
+            android:id="@+id/forcast_lowtemp_lable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/detailed_activity_lowtemp"
+            android:textSize="13dp"
+            android:layout_weight="1"
+            android:textColor="@android:color/holo_blue_light"
+            android:gravity="center">
+        </TextView>
+
+        <TextView
+            android:id="@+id/forcast_humidity_lable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/detailed_activity_avehumidity"
+            android:textSize="13dp"
+            android:layout_weight="1"
+            android:textColor="@android:color/holo_blue_light"
+            android:gravity="center">
+        </TextView>
+
+    </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            />
+
+        <ListView
+            android:id="@+id/forecast_list"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent">
+        </ListView>
 
 
     </LinearLayout>

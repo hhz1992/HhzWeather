@@ -4,16 +4,25 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import com.gwu.huanzhou.hhzweather.Constants;
 import com.gwu.huanzhou.hhzweather.PersistanceManager;
 import com.gwu.huanzhou.hhzweather.R;
+import com.gwu.huanzhou.hhzweather.adapter.ListViewAdapters;
+import com.gwu.huanzhou.hhzweather.asynctask.ForeCastSearchAsyncTask;
 import com.gwu.huanzhou.hhzweather.model.Condition;
 import com.gwu.huanzhou.hhzweather.model.Displaylocation;
+import com.gwu.huanzhou.hhzweather.model.Forecast;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
-public class DetailedActivity extends AppCompatActivity {
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+public class DetailedActivity extends AppCompatActivity  implements ForeCastSearchAsyncTask.ForecastSearchCompletionListener{
 
     private final String TAG = "DetailedActivity";
 
@@ -27,6 +36,8 @@ public class DetailedActivity extends AppCompatActivity {
     private TextView mDetailedPressure;
     private TextView mDetailedWindmph;
     private TextView mDetailedWinddir;
+
+    private ListView mdDetailedForcast;
 
     private PersistanceManager mPersistanceManager;
 
@@ -76,7 +87,54 @@ public class DetailedActivity extends AppCompatActivity {
             }
         });
 
+        ForeCastSearchAsyncTask forecastTask = new ForeCastSearchAsyncTask(this, this);
+        forecastTask.execute(condition.getmDisplaylocation().getmState(), condition.getmDisplaylocation().getmCity());
+
+
 
     }
 
+    @Override
+    public void WundergroundForecastFound(List<Forecast> forecasts) {
+
+
+        ArrayList list=new ArrayList<HashMap<String,String>>();
+
+//        HashMap<String,String> temp=new HashMap<String, String>();
+//        temp.put(Constants.FIRST_COLUMN, "Ankit Karia");
+//        temp.put(Constants.SECOND_COLUMN, "Male");
+//        temp.put(Constants.THIRD_COLUMN, "22");
+//        temp.put(Constants.FOURTH_COLUMN, "Unmarried");
+//        list.add(temp);
+//
+//        HashMap<String,String> temp2=new HashMap<String, String>();
+//        temp2.put(Constants.FIRST_COLUMN, "Rajat Ghai");
+//        temp2.put(Constants.SECOND_COLUMN, "Male");
+//        temp2.put(Constants.THIRD_COLUMN, "25");
+//        temp2.put(Constants.FOURTH_COLUMN, "Unmarried");
+//        list.add(temp2);
+
+
+        for(int i=0; i<forecasts.size();i++){
+            HashMap<String,String> temp=new HashMap<String, String>();
+            temp.put(Constants.FORECAST_DAY, forecasts.get(i).getmWeekday());
+            temp.put(Constants.FORECAST_IMAGE, forecasts.get(i).getmIconUrl());
+            temp.put(Constants.FORECAST_HIGHTEMP, forecasts.get(i).getmHighTempF());
+            temp.put(Constants.FORECAST_LOWTEMP, forecasts.get(i).getmLowTempF());
+            temp.put(Constants.FORECAST_HUMIDITY,forecasts.get(i).getMmAveHumidity());
+            list.add(temp);
+        }
+
+
+        mdDetailedForcast = (ListView)findViewById(R.id.forecast_list);
+        ListViewAdapters adapter=new ListViewAdapters(this, list);
+        mdDetailedForcast.setAdapter(adapter);
+
+
+    }
+
+    @Override
+    public void WundergroundForecastNotFound() {
+
+    }
 }

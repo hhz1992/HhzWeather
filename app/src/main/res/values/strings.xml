@@ -12,4 +12,11 @@
     <string name="detailed_activity_wind">WIND</string>
     <string name="detailed_activity_direction">DIRECTION</string>
 
+    <string name="detailed_activity_weekday">WEEKDAY</string>
+    <string name="detailed_activity_weather">WEATHER</string>
+    <string name="detailed_activity_hightemp">HIGHTEMP</string>
+    <string name="detailed_activity_lowtemp">LOWTEMP</string>
+    <string name="detailed_activity_avehumidity">HUMIDITY</string>
+
+
 </resources>
