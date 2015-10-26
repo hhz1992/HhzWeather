@@ -28,7 +28,6 @@
                 android:id="@+id/detailed_temp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="hi"
                 android:inputType="text"
                 android:textColor="@android:color/white"
                 android:textColorHint="@android:color/white"
@@ -55,7 +54,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="hi"
                 android:textColor="@android:color/white"
                 android:textColorHint="@android:color/white"
                 android:textSize="30dp"
@@ -69,7 +67,6 @@
                 android:textColor="@android:color/white"
                 android:textColorHint="@android:color/white"
                 android:textSize="30dp"
-                android:hint="hi"
                 android:layout_weight="1"
                 android:gravity="center"
                 />
@@ -81,7 +78,6 @@
                 android:textColor="@android:color/white"
                 android:textColorHint="@android:color/white"
                 android:textSize="30dp"
-                android:hint="hi"
                 android:layout_weight="1"
                 android:gravity="center"
                 />
@@ -97,11 +93,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="HUMIDITY"
+                android:text="@string/detailed_activity_humidity"
                 android:textColor="@android:color/holo_blue_light"
                 android:textSize="20dp"
                 android:gravity="center"/>
-
 
             <TextView
                 android:id="@+id/detailed_dewpoint_text"
@@ -109,7 +104,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textSize="20dp"
-                android:text="DEWPOIUNT"
+                android:text="@string/detailed_activity_dewpoint"
                 android:textColor="@android:color/holo_blue_light"
                 android:gravity="center"
                 />
@@ -120,7 +115,86 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textSize="20dp"
-                android:text="VISIBILITY"
+                android:text="@string/detailed_activity_visibility"
+                android:textColor="@android:color/holo_blue_light"
+                android:gravity="center"
+                />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/detailed_pressure"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@android:color/white"
+                android:textColorHint="@android:color/white"
+                android:textSize="30dp"
+                android:gravity="center"
+                />
+
+            <TextView
+                android:id="@+id/detailed_windmph"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:textColorHint="@android:color/white"
+                android:textSize="30dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                />
+
+            <TextView
+                android:id="@+id/detailed_winddir"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:textColorHint="@android:color/white"
+                android:textSize="30dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/detailed_pressure_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/detailed_activity_pressure"
+                android:textColor="@android:color/holo_blue_light"
+                android:textSize="20dp"
+                android:gravity="center"/>
+
+
+            <TextView
+                android:id="@+id/detailed_windmph_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="20dp"
+                android:text="@string/detailed_activity_wind"
+                android:textColor="@android:color/holo_blue_light"
+                android:gravity="center"
+                />
+
+            <TextView
+                android:id="@+id/detailed_winddir_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="20dp"
+                android:text="@string/detailed_activity_direction"
                 android:textColor="@android:color/holo_blue_light"
                 android:gravity="center"
                 />

@@ -39,5 +39,7 @@ public class Constants {
     public static final String DEWPOINT_C = "DEWPOINT_C";
     public static final String PRESSURE_IN = "PRESSURE_IN";
     public static final String VISIBILITY_MI = "VISIBILITY_MI";
+    public static final String WIND_MPH = "WIND_MPH";
+    public static final String WIND_DIR = "WIND_DIR";
 
 }

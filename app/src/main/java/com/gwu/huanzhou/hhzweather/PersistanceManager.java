@@ -34,6 +34,8 @@ public class PersistanceManager {
         editor.putString(Constants.DEWPOINT_C, condition.getmDewpointC());
         editor.putString(Constants.VISIBILITY_MI, condition.getmVisibilityMi());
         editor.putString(Constants.PRESSURE_IN, condition.getmPressureIn());
+        editor.putString(Constants.WIND_MPH,condition.getmWindMph());
+        editor.putString(Constants.WIND_DIR,condition.getmWindDir());
 
         editor.apply();
 
@@ -58,6 +60,8 @@ public class PersistanceManager {
         condition.setmDewpointC(sharedPreferences.getString(Constants.DEWPOINT_C, ""));
         condition.setmVisibilityMi(sharedPreferences.getString(Constants.VISIBILITY_MI, ""));
         condition.setmPressureIn(sharedPreferences.getString(Constants.PRESSURE_IN, ""));
+        condition.setmWindMph(sharedPreferences.getString(Constants.WIND_MPH, ""));
+        condition.setmWindDir(sharedPreferences.getString(Constants.WIND_DIR,""));
 
         return true;
     }

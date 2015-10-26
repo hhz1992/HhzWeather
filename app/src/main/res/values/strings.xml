@@ -5,4 +5,11 @@
     <string name="location_permission_message">The app will now request access to your location to get your weather.</string>
     <string name="title_activity_detailed">DetailedActivity</string>
 
+    <string name="detailed_activity_humidity">HUMIDITY</string>
+    <string name="detailed_activity_dewpoint">DEWPOINT</string>
+    <string name="detailed_activity_visibility">VISIBILITY</string>
+    <string name="detailed_activity_pressure">PRESSURE</string>
+    <string name="detailed_activity_wind">WIND</string>
+    <string name="detailed_activity_direction">DIRECTION</string>
+
 </resources>

@@ -24,6 +24,10 @@ public class DetailedActivity extends AppCompatActivity {
     private TextView mDetailedDewpoint;
     private TextView mDetailedVisibility;
 
+    private TextView mDetailedPressure;
+    private TextView mDetailedWindmph;
+    private TextView mDetailedWinddir;
+
     private PersistanceManager mPersistanceManager;
 
     Condition condition;
@@ -44,11 +48,18 @@ public class DetailedActivity extends AppCompatActivity {
         mDetailedTemp =  (TextView)findViewById(R.id.detailed_temp);
         mDetailedImage = (ImageView)findViewById(R.id.detailed_image);
 
+        mDetailedPressure = (TextView)findViewById(R.id.detailed_pressure);
+        mDetailedWindmph = (TextView)findViewById(R.id.detailed_windmph);
+        mDetailedWinddir = (TextView)findViewById(R.id.detailed_winddir);
+
         mPersistanceManager.getCurrentCondition(condition);
         mDetailedTemp.setText(condition.getmTemperatureF());
         mDetailedHumidity.setText(condition.getmRelativeHumidity());
         mDetailedDewpoint.setText(condition.getmDewpointF());
         mDetailedVisibility.setText(condition.getmVisibilityMi());
+        mDetailedPressure.setText(condition.getmPressureIn());
+        mDetailedWindmph.setText(condition.getmWindMph());
+        mDetailedWinddir.setText(condition.getmWindDir());
 
         Ion.with(mDetailedImage).load(condition.getmIconUrl()).setCallback(new FutureCallback<ImageView>() {
             @Override

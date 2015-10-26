@@ -10,19 +10,17 @@ public class Condition {
     private String mTemperatureString;
     private String mTemperatureF;
     private String mTemperatureC;
-
     private String mRelativeHumidity;
     private String mWind;
+    private String mWindMph;
+    private String mWindDir;
     private String mIconUrl;
-
     private String mDewpointF;
     private String mDewpointC;
-
     private String mVisibilityMi;
     private String mPressureIn;
 
     private Displaylocation mDisplaylocation;
-
 
     public String getmWeather() {
         return mWeather;
@@ -120,4 +118,21 @@ public class Condition {
     public String getmTemperatureString() {
         return mTemperatureString;
     }
+
+    public String getmWindMph() {
+        return mWindMph;
+    }
+
+    public void setmWindMph(String mWindMph) {
+        this.mWindMph = mWindMph;
+    }
+
+    public String getmWindDir() {
+        return mWindDir;
+    }
+
+    public void setmWindDir(String mWindDir) {
+        this.mWindDir = mWindDir;
+    }
+
 }
