@@ -67,8 +67,8 @@ public class WeatherActivity extends AppCompatActivity implements LocationFinder
 
     private EditText mEditTextZipcode;
     Activity activity;
-    ConditionSearchAsyncTask.ConditionSearchCompletionListener inter = this;
-
+    ConditionSearchAsyncTask.ConditionSearchCompletionListener mConditionSearchCompletionListener  = this;
+    LocationFinder.LocationDetector mLocationDetector = this;
 
 
     Condition condition;
@@ -160,7 +160,6 @@ public class WeatherActivity extends AppCompatActivity implements LocationFinder
                                 startActivity(intent);
                             }
 
-                            System.out.println("click");
 
                         } else {
 
@@ -177,6 +176,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationFinder
 
                             Toast toast = Toast.makeText(context, text, duration);
                             toast.show();
+                            new LocationFinder(getApplicationContext(),mLocationDetector).detectLocation();
 
                         }
 
@@ -217,7 +217,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationFinder
                     Toast toast = Toast.makeText(context, text, duration);
                     toast.show();
                     System.out.println(mEditTextZipcode.getText());
-                    new ConditionSearchAsyncTask(getApplicationContext(),inter).execute(mEditTextZipcode.getText().toString());
+                    new ConditionSearchAsyncTask(getApplicationContext(),mConditionSearchCompletionListener).execute(mEditTextZipcode.getText().toString());
 
                 }
                 else{
@@ -235,6 +235,21 @@ public class WeatherActivity extends AppCompatActivity implements LocationFinder
 
 
     }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+
+       if(condition!=null) {
+           if(mPersistanceManager.getCurrentTempDisplay()!=null && mPersistanceManager.getCurrentTempDisplay()!=""){
+               condition.setTEMPDISPLAY(mPersistanceManager.getCurrentTempDisplay());
+               mTextViewTemp.setText(condition.getTemperature());
+           }
+       }
+
+
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
